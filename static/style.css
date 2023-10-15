@@ -28,12 +28,18 @@ body {
     margin-top: 2%;
     border-radius: 15px;
     transition: background-color 0.5 ease;
-    background-color: transparent;
+    background-color: rgb(51, 243, 138);
     padding: 1% 5%;
     text-align: center;
+    color: rgb(0, 0, 0);
 }
 
 #submit_button:hover {
     cursor: pointer;
-    background-color: rgba(236, 249, 95, 0.505);
+    background-color: rgba(64, 225, 10, 0.505);
+}
+
+#top_nav {
+    background-color: #fbcd08;
+    padding: 10px;
 }
