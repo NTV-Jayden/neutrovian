@@ -1,26 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <script src="../static/scripts.js" defer></script>
 </head>
+
 <body>
     <div id="top_nav" style="text-align: center;">
-        <img src="../static/img/neutrovis.png" style="display: block; margin: 0 auto;"/>
+        <img src="../static/img/neutrovis.png" style="display: block; margin: 0 auto;" />
     </div>
     <div id="main">
-        <h1>QR Code Generator</h1>
+        <h1 class="text-3xl font-bold my-10">QR Code Generator</h1>
         <form method="post">
-            <div>
-                <p>URL:</p>
-                <input id="input_field" type="text" name="url" autofocus required>
+            <div class="flex items-center justify-center mx-5">
+                <label for="filename" class="block text-sm font-medium leading-6 text-gray-900">File Name</label>
             </div>
-            <div>
-                <input id="submit_button" type="submit" value="Download"/>
+            <div class="flex items-center justify-center mx-5">
+                <input type="text" name="filename" id="filename" class="block text-center w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" value="{{ filename }}" placeholder="QR Code File Name">
+            </div>
+            <div class="flex items-center justify-center mx-5">
+                <label for="filename" class="block mt-10 text-sm font-medium leading-6 text-gray-900">Website URL Link</label>
+            </div>
+            <div class="flex items-center justify-center">
+                <input class="block text-center w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" id="input_field" type="text" value="{{ url }}" name="url" placeholder="Key in URL here" autofocus required>
+            </div>
+            <div class="pt-5">
+                <div class="flex items-center justify-center mx-5 pt-5">
+                    <button class="border-gray-500 border-2 my-4 mr-3 px-5 hover:pointer hover:bg-gray-200 hover:border-indigo-600 rounded-full" id="submit_button" type="submit">View</button>
+                    <a class="border-gray-500 border-2 my-4 ml-3 px-5 hover:pointer hover:bg-gray-200 hover:border-indigo-600 rounded-full" id="reset_button" href="/">Reset</a>
+                </div>
+            </div>
+            <div id="div">
+                {% if message %}
+                {{ message }}
+                {% endif %}
             </div>
         </form>
+        {% if img_data %}
+        <div id="qr_output" class="flex items-center justify-center my-5">
+            <img src="data:image/png;base64,{{ img_data }}" alt="QR Code"><br>
+        </div>
+        <div class="flex items-center justify-center">
+            <a class="cursor-pointer rounded-full bg-blue-50 px-5 py-2 ring-1 ring-inset ring-blue-700/10 hover:text-blue-700" href="data:image/png;base64,{{ img_data }}" download="{{ filename }}">Download {{ filename }}</a>
+        </div>
+        {% endif %}
     </div>
 </body>
+
 </html>
