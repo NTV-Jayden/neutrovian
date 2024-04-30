@@ -1,7 +1,7 @@
 from datetime import datetime
 import io
 import base64
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, send_file
 import qrcode
 import validators
 import pytz
@@ -39,8 +39,15 @@ def compare_stock():
     if request.method == "GET":
         return render_template("check_stock.html")
     if request.method == "POST":
-        print("HI")        
-
+        odoo_stock = request.files["odoo_stock"]
+        wms_stock = request.files["wms_stock"]
+        product_lot = request.files["product_lot"]
+        if odoo_stock and wms_stock and product_lot:
+            comparison_result = run_comparison(odoo_stock, wms_stock, product_lot)
+            return send_file(comparison_result, as_attachment=True)
+        else:
+            return "Please upload all required files"
+        
 
 if __name__ == "__main__":
     app.run(debug=True)

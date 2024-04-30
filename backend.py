@@ -2,23 +2,25 @@ import openpyxl
 import pandas as pd
 import csv
 from datetime import datetime
+import os
 
 
 def gather_product_lot(lot_file):
     '''
         prod_lot = {"prod_1": True}
     '''
+    prod_lot = {}
     lot_workbook = openpyxl.load_workbook(lot_file, data_only=True)
     lot_sheet = lot_workbook.active
-        max_row = lot_sheet.max_row
-        for i in range(2, max_row+1):
-            product = lot_sheet.cell(row=i, column=1).value
-            tracking = lot_sheet.cell(row=i, column=2).value
-            prod_lot[product] = True if tracking == "By Lots" else False
-        return prod_lot
+    max_row = lot_sheet.max_row
+    for i in range(2, max_row+1):
+        product = lot_sheet.cell(row=i, column=1).value
+        tracking = lot_sheet.cell(row=i, column=2).value
+        prod_lot[product] = True if tracking == "By Lots" else False
+    return prod_lot
 
 
-def gather_wms_stock(self, wms_file, lot_file) -> dict:
+def gather_wms_stock(wms_file, lot_file) -> dict:
         '''
             wms_stock = {('prod1', 'location', 'lot_number', 'uom'): quantity}
         '''
@@ -26,7 +28,7 @@ def gather_wms_stock(self, wms_file, lot_file) -> dict:
         wms_workbook = openpyxl.load_workbook(wms_file, data_only=True)
         wms_sheet = wms_workbook.active
         max_row = wms_sheet.max_row
-        product_lot = self.gather_product_lot(lot_file)
+        product_lot = gather_product_lot(lot_file)
         for i in range(2, max_row+1):
             product = wms_sheet.cell(row=i, column=3).value
             quantity = wms_sheet.cell(row=i, column=12).value
@@ -45,7 +47,7 @@ def gather_wms_stock(self, wms_file, lot_file) -> dict:
         return wms_stock
 
 
-def gather_odoo_stock(self, odoo_file) -> dict:
+def gather_odoo_stock(odoo_file) -> dict:
     '''
         odoo_stock = {('prod1', 'location', 'lot_number', 'uom'): (quantity, 'lot_external_id')}
     '''
@@ -73,7 +75,7 @@ def gather_odoo_stock(self, odoo_file) -> dict:
     return odoo_stock
 
 
-def compare_stock(self, odoo: dict, wms: dict) -> dict:
+def compare_stock(odoo: dict, wms: dict) -> dict:
     '''
         adjustment = {('prod1', 'location', 'lot_number', 'uom'): (quantity, 'lot_external_id', 'reason')}
     '''        
@@ -92,10 +94,10 @@ def compare_stock(self, odoo: dict, wms: dict) -> dict:
     return adjustment
 
 
-def write_result(self, adjustment: dict[tuple]) -> None:
+def write_result(adjustment: dict[tuple]) -> None:
     current_datetime = datetime.now()
     csv_filename = current_datetime.strftime("%Y%m%d_%H%M%S") + ".csv"
-    excel_filename = current_datetime.strftime("%Y%m%d_%H%M%S") + ".xlsx"
+    excel_filename = "difference_on_" + current_datetime.strftime("%Y%m%d_%H%M%S") + ".xlsx"
 
     with open(csv_filename, mode='w', newline='') as file:
         writer = csv.writer(file)
@@ -109,12 +111,12 @@ def write_result(self, adjustment: dict[tuple]) -> None:
                 print(product_key)
     df = pd.read_csv(csv_filename)
     df.to_excel(excel_filename, index=False)
-    return True
+    os.remove(csv_filename)
+    return excel_filename
 
 
 def run_comparison(odoo_file, wms_file, lot_file):
-    wms_stock = self.gather_wms_stock(wms_file, lot_file)
-    odoo_stock = self.gather_odoo_stock(odoo_file)
-    adjustment = self.compare_stock(odoo_stock, wms_stock)
-    if self.write_result(adjustment):
-        return True
+    wms_stock = gather_wms_stock(wms_file, lot_file)
+    odoo_stock = gather_odoo_stock(odoo_file)
+    adjustment = compare_stock(odoo_stock, wms_stock)
+    return write_result(adjustment)

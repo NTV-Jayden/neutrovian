@@ -939,3 +939,19 @@ body {
     line-height: 1.5rem;
   }
 }
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  flex: 0 0 150px;
+  margin-right: 1rem;
+}
+
+.form-group input[type="file"] {
+  flex: 1;
+  max-width: 300px;
+}

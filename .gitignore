@@ -161,3 +161,7 @@ cython_debug/
 
 # Tailwind CSS
 node_modules/
+
+# static files
+*.xlsx
+*.csv
