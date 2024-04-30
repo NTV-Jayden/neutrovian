@@ -5,6 +5,7 @@ from flask import Flask, request, render_template
 import qrcode
 import validators
 import pytz
+from backend import run_comparison
 
 
 app = Flask(__name__)
@@ -31,6 +32,15 @@ def index():
         img.save(img_stream, 'PNG')
         img_base64 = base64.b64encode(img_stream.getvalue()).decode()
     return render_template("index.html", img_data=img_base64, url=url, filename=filename)
+
+
+@app.route("/comparestock", methods=["POST", "GET"])
+def compare_stock():
+    if request.method == "GET":
+        return render_template("check_stock.html")
+    if request.method == "POST":
+        print("HI")        
+
 
 if __name__ == "__main__":
     app.run(debug=True)
