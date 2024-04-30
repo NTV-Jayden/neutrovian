@@ -47,7 +47,13 @@ def compare_stock():
             return send_file(comparison_result, as_attachment=True)
         else:
             return "Please upload all required files"
-        
+
+
+@app.route("/howtouse", methods=["GET"])
+def howtouse():
+    if request.method == "GET":
+        return render_template("howtouse.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

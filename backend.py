@@ -97,7 +97,7 @@ def compare_stock(odoo: dict, wms: dict) -> dict:
 def write_result(adjustment: dict[tuple]) -> None:
     current_datetime = datetime.now()
     csv_filename = current_datetime.strftime("%Y%m%d_%H%M%S") + ".csv"
-    excel_filename = "difference_on_" + current_datetime.strftime("%Y%m%d_%H%M%S") + ".xlsx"
+    excel_filename = "/home/neutrovian/neutrovian/difference_on_" + current_datetime.strftime("%Y%m%d_%H%M%S") + ".xlsx"
 
     with open(csv_filename, mode='w', newline='') as file:
         writer = csv.writer(file)

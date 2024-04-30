@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Comparison (Odoo vs WMS)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <script src="../static/scripts.js" defer></script>
+</head>
+
+<body>
+    <div id="top_nav">
+        <img src="../static/img/neutrovis.png" style="display: block; margin: 0 auto;" />
+    </div>
+    <div id="main">
+        <h1 class="text-3xl font-bold my-10">How to use</h1>
+        <a class="hover:bg-gray-200 text-lime-700" href="/comparestock">Back to previous page</a>
+        <p>Download the files following the screenshot below.</p>
+        <ol>
+            <li> 1. Download in Odoo: Inventory -> Inventory Adjustment (Select ALL)
+                <img src="../static/img/howtouse1.png">
+            </li>
+            <li> 2. Download in Odoo: Inventory -> Product -> Product -> Select List View -> Select ALL
+                <img src="../static/img/howtouse2.png">
+            </li>
+            <li> 3. <img src="../static/img/howtouse3.png"></li>
+        </ol>
+    </div>
+</body>
+
+</html>
